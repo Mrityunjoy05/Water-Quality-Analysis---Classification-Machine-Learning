@@ -30,8 +30,8 @@ data:
 # Feature Engineering Configuration
 features:
   # Missing value handling
+
   handle_missing: "median"  # Options: mean, median, mode, drop
-  missing_threshold: 0.4    # Drop columns with >70% missing values
   
   # Scaling method
   scaling_method: "standard"  # Options: standard, minmax, robust
@@ -60,13 +60,13 @@ models:
 
 # Training Configuration
 training:
-  cv_folds: 5
+  cv_folds: 3
   n_jobs: -1
   verbose: 1
   
   # Hyperparameter tuning
   hyperparameter_tuning:
-    enabled: false
+    enabled: True
     method: "grid_search"  # Options: grid_search, random_search
     cv: 3
 
@@ -77,14 +77,13 @@ evaluation:
     - precision
     - recall
     - f1_score
-    # - roc_auc  # Added ROC-AUC
+
   
   # Visualization settings
   save_confusion_matrix: true
   confusion_matrix_normalize: true  # Show percentages in confusion matrix
   save_classification_report: true
   save_feature_importance: true
-  # save_roc_curve: true  # Save ROC curves for each model
 
 # Output Paths
 output:

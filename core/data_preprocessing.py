@@ -9,30 +9,6 @@ import joblib
 from pathlib import Path
 
 
-class TargetEncoder:
-    """Target encoder for categorical variables."""
-    
-    def __init__(self, smoothing=1.0, min_samples_leaf=1):
-        self.smoothing = smoothing
-        self.min_samples_leaf = min_samples_leaf
-        self.mapping = {}
-        self.global_mean = None
-    
-    def fit(self, X: pd.Series, y: pd.Series):
-        self.global_mean = y.mean()
-        
-        stats = pd.DataFrame({'cat': X, 'target': y})
-        agg = stats.groupby('cat')['target'].agg(['mean', 'count'])
-        
-        smoothing_factor = 1 / (1 + np.exp(-(agg['count'] - self.min_samples_leaf) / self.smoothing))
-        self.mapping = (agg['mean'] * smoothing_factor + self.global_mean * (1 - smoothing_factor)).to_dict()
-        
-        return self
-    
-    def transform(self, X: pd.Series):
-        return X.map(self.mapping).fillna(self.global_mean)
-
-
 class DataPreprocessor:
     """Handles all data preprocessing steps."""
     
@@ -92,22 +68,6 @@ class DataPreprocessor:
         print(f"   ✅ Created {created} missing indicators")
         return df
     
-    # def drop_high_missing_columns(self, df: pd.DataFrame, threshold: float = 40.0) -> pd.DataFrame:
-    #     """Drop columns with missing values above threshold."""
-    #     print(f"\n🗑️ Dropping columns with >{threshold}% missing values...")
-        
-    #     null_percentage = (df.isnull().sum() / len(df)) * 100
-    #     columns_to_drop = null_percentage[null_percentage >= threshold]
-        
-    #     if len(columns_to_drop) > 0:
-    #         print(f"   Columns to drop ({len(columns_to_drop)}):")
-    #         for col, pct in columns_to_drop.items():
-    #             print(f"      • {col[:40]:<40} : {pct:.2f}%")
-    #         df = df.drop(columns=columns_to_drop.index)
-    #     else:
-    #         print(f"   ✅ No columns exceed threshold")
-        
-    #     return df
     
     
     def drop_high_missing_columns(self, df: pd.DataFrame, threshold: float = 40.0) -> pd.DataFrame:
@@ -251,21 +211,6 @@ class DataPreprocessor:
                 else:
                     df[col] = self.label_encoders[col].transform(df[col].astype(str))
             print(f"   ✅ Label encoded {len(categorical_cols)} columns")
-        
-        elif method == 'target':
-            if y is None:
-                raise ValueError("Target variable required for target encoding")
-            
-            smoothing = self.config.get('features', {}).get('target_encoding', {}).get('smoothing', 1.0)
-            min_samples = self.config.get('features', {}).get('target_encoding', {}).get('min_samples_leaf', 1)
-            
-            for col in categorical_cols:
-                if col not in self.target_encoders:
-                    self.target_encoders[col] = TargetEncoder(smoothing=smoothing, min_samples_leaf=min_samples)
-                    df[col] = self.target_encoders[col].fit(df[col], y).transform(df[col])
-                else:
-                    df[col] = self.target_encoders[col].transform(df[col])
-            print(f"   ✅ Target encoded {len(categorical_cols)} columns")
         
         return df
     
