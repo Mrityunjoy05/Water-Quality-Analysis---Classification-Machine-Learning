@@ -205,13 +205,6 @@ Open your browser to `http://localhost:8501`
 
 ### **Baseline Models (Default Parameters)**
 
-| Model | Accuracy | Precision | Recall | F1-Score |
-|-------|----------|-----------|--------|----------|
-| Decision Tree | 0.82 | 0.81 | 0.82 | 0.81 |
-| Random Forest | 0.89 | 0.88 | 0.89 | 0.91 |
-| XGBoost | 0.94 | 0.90 | 0.93 | 0.903 | 0.94 |
-| Logistic Regression | 0.76 | 0.75 | 0.76 | 0.75 |
-
 | Model               | Accuracy | Precision | Recall | F1-Score |
 | ------------------- | -------- | --------- | ------ | -------- |
 | Decision Tree       | 0.83     | 0.86      | 0.83   | 0.85     |
