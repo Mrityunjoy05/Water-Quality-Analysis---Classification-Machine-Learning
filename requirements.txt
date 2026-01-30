@@ -1,0 +1,18 @@
+# Jupyter kernel for running notebooks
+ipykernel  
+
+# Data visualization libraries
+matplotlib   # For plotting graphs
+seaborn     # Statistical data visualization
+plotly       # Interactive plots
+
+# Numerical and data manipulation
+numpy        # Numerical computations
+pandas        # Data analysis and manipulation
+# openpyxl      # Handling Excel files
+
+# Web requests
+# requests     # Making HTTP requests
+
+# Web app framework
+streamlit    # Building interactive dashboards

@@ -1,0 +1,94 @@
+# Water Quality Classification Project Configuration
+
+project_name: "Water Quality Multi-Class Classification"
+version: "1.0.0"
+random_state: 42
+
+# Data Configuration
+data:
+  raw_data_path: "data/raw/Project file.csv"
+  processed_data_path: "data/processed/"
+  encoding: "cp1252"  # Character encoding for reading CSV (Windows-1252)
+  target_column: "Use Based Class"
+  
+  # Train-test split
+  train_test_split: 0.2
+  stratify: true
+  
+  # Columns to drop (non-predictive)
+  columns_to_drop:
+    - "STN Code"
+    - "Sampling Date"
+    - "Month"
+    - "Sampling Time"
+    - "Stn Name"
+    - "Mon Agency"
+    - "Remark"
+    - "latitude"
+    - "longitude"
+
+# Feature Engineering Configuration
+features:
+  # Missing value handling
+  handle_missing: "median"  # Options: mean, median, mode, drop
+  missing_threshold: 0.4    # Drop columns with >70% missing values
+  
+  # Scaling method
+  scaling_method: "standard"  # Options: standard, minmax, robust
+  
+  # Categorical encoding
+  categorical_encoding: "label"  # Options: label, target, onehot
+  
+  # Target encoding parameters (when using target encoding)
+  target_encoding:
+    smoothing: 1.0  # Smoothing parameter for target encoding
+    min_samples_leaf: 1
+  
+  # Feature selection
+  feature_selection:
+    enabled: true
+    method: "model_based"  # Options: k_best, model_based, rfe
+    n_features: 35
+
+# Model Configuration
+models:
+  enabled_models:
+    - random_forest
+    - xgboost
+    - logistic_regression
+    - decision_tree  # Added Decision Tree
+
+# Training Configuration
+training:
+  cv_folds: 5
+  n_jobs: -1
+  verbose: 1
+  
+  # Hyperparameter tuning
+  hyperparameter_tuning:
+    enabled: false
+    method: "grid_search"  # Options: grid_search, random_search
+    cv: 3
+
+# Evaluation Configuration
+evaluation:
+  metrics:
+    - accuracy
+    - precision
+    - recall
+    - f1_score
+    # - roc_auc  # Added ROC-AUC
+  
+  # Visualization settings
+  save_confusion_matrix: true
+  confusion_matrix_normalize: true  # Show percentages in confusion matrix
+  save_classification_report: true
+  save_feature_importance: true
+  # save_roc_curve: true  # Save ROC curves for each model
+
+# Output Paths
+output:
+  saved_models_dir: "saved_models/"
+  reports_dir: "reports/"
+  figures_dir: "reports/figures/"
+  metrics_dir: "reports/metrics/"
